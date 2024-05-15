@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            margin-bottom: 5px;
+        }
+
+        section {
+            margin: 40px;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body style="background-color: rgb(218, 224, 230);">
+    <div style="display: flex; justify-content: space-between; ">
+        <div style="font-size: 52px; font-weight: 600;">Task Manager API Documentation</div>
+        <div style="display: flex; gap: 16px; align-items: center; font-size: 20px;">
+            <div><a style="color: blueviolet; " href="https://google.com" target="_blank">Live</a></div>
+            <div><a style="color: blueviolet;" href="https://google.com" target="_blank">Github</a></div>
+        </div>
+
+
+
+    </div>
+    <h1 style="font-size: 40px; color: gray;">Technologies Used :-</h1>
+    <section>
+
+
+
+        <section>
+            <h3>Node.js</h3>
+            <p>Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine. It allows developers to run
+                JavaScript on the server-side.</p>
+        </section>
+
+        <section>
+            <h3>TypeScript</h3>
+            <p>TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. It adds optional static
+                typing to the language, enhancing code quality and developer productivity.</p>
+        </section>
+
+        <section>
+            <h3>Zod</h3>
+            <p>Zod is a TypeScript-first schema declaration and validation library. It provides a simple and expressive
+                way to define schemas and validate data against them.</p>
+        </section>
+
+        <section>
+            <h3>Express.js</h3>
+            <p>Express.js is a minimalist web application framework for Node.js. It provides a robust set of features
+                for building web and mobile applications, including routing, middleware, and HTTP utilities.</p>
+        </section>
+
+        <section>
+            <h3>MongoDB</h3>
+            <p>MongoDB is a NoSQL database that stores data in flexible, JSON-like documents. It offers high
+                performance, scalability, and flexibility for modern applications.</p>
+        </section>
+
+        <section>
+            <h3>JSON Web Token (jsonwebtoken)</h3>
+            <p>JSON Web Token (JWT) is a compact, URL-safe means of representing claims to be transferred between two
+                parties. It is commonly used for authentication and information exchange in web development. The
+                'jsonwebtoken' library in Node.js allows for easy generation and verification of JWTs.</p>
+        </section>
+
+    </section>
+
+    <h1 style="font-size: 40px; color: gray;">Schema Details :-</h1>
+
+    <section>
+
+
+        <section>
+            <h3>Enum Status</h3>
+            <p>The <strong>Status</strong> enum defines the possible statuses for tasks and subtasks. It includes:</p>
+            <ul>
+                <li><strong>Pending:</strong> Represents tasks or subtasks that are awaiting completion.</li>
+                <li><strong>Completed:</strong> Represents tasks or subtasks that have been finished.</li>
+                <li><strong>Overdue:</strong> Represents tasks or subtasks that have passed their deadline without
+                    completion.</li>
+            </ul>
+            <pre><code>
+                    enum Status {
+                        Pending = "Pending",
+                        Completed = "Completed",
+                        Overdue = "Overdue"
+                    }</code></pre>
+
+            </code>
+        </section>
+
+        <section>
+            <h3>Subtask Schema</h3>
+            <p>The <strong>Subtask Schema</strong> defines the structure of a subtask within a task. Each subtask
+                includes:</p>
+            <ul>
+                <li><strong>Subject:</strong> A brief description of the subtask.</li>
+                <li><strong>Deadline:</strong> The date or time by which the subtask should be completed.</li>
+                <li><strong>Status:</strong> The current status of the subtask, which can be one of the predefined enum
+                    values.</li>
+                <li><strong>isDeleted:</strong> A boolean flag indicating whether the subtask has been deleted.</li>
+            </ul>
+            <pre>
+                <code>
+                    const subTaskSchema = new mongoose.Schema({
+                        subject: {
+                            type: String,
+                            required: true,
+                        },
+                        deadline: {
+                            type: String,
+                            required: true,
+                        },
+                        status: {
+                            type: String,
+                            default: Status.Pending
+                        },
+                        isDeleted: {
+                            type: Boolean,
+                            default: false 
+                        }
+                    });
+                </code>
+            </pre>
+
+        </section>
+
+        <section>
+            <h3>Task Schema</h3>
+            <p>The <strong>Task Schema</strong> defines the structure of a task, which can contain multiple subtasks.
+                Each task includes:</p>
+            <ul>
+                <li><strong>Subject:</strong> A brief description of the task.</li>
+                <li><strong>Deadline:</strong> The date or time by which the task should be completed.</li>
+                <li><strong>Status:</strong> The current status of the task, which can be one of the predefined enum
+                    values.</li>
+                <li><strong>isDeleted:</strong> A boolean flag indicating whether the task has been deleted.</li>
+                <li><strong>Subtasks:</strong> An array containing the subtasks associated with the task.</li>
+            </ul>
+            <pre>
+                <code>
+                    const TaskSchema = new mongoose.Schema({
+                        subject: {
+                            type: String,
+                            required: true,
+                        },
+                        deadline: {
+                            type: String,
+                            required: true,
+                        },
+                        status: {
+                            type: String,
+                            default: Status.Pending 
+                        },
+                        isDeleted: {
+                            type: Boolean,
+                            default: false 
+                        },
+                        subTask: [subTaskSchema] 
+                    });
+                </code>
+            </pre>
+        </section>
+
+        <section>
+            <h3>User Schema</h3>
+            <p>The <strong>User Schema</strong> defines the structure of a user, including their name, email, password,
+                and associated tasks. Each user includes:</p>
+            <ul>
+                <li><strong>Name:</strong> The user's full name.</li>
+                <li><strong>Email:</strong> The user's email address, which must be unique and follow a valid format.
+                </li>
+                <li><strong>Password:</strong> The user's password, which must meet certain length requirements.</li>
+                <li><strong>Tasks:</strong> An array containing the tasks associated with the user.</li>
+            </ul>
+            <pre>
+                <code>
+                    const userSchema = new mongoose.Schema({
+                        name: { type: String, required: true }, 
+                        email: { type: String, required: true },
+                        password: { type: String, required: true }, 
+                        task: [TaskSchema] 
+                    });
+                </code>
+            </pre>
+        </section>
+
+    </section>
+
+    <h1 style="font-size: 40px; color: gray;">Routes Types :-</h1>
+
+    <section>
+        <h3>/user</h3>
+        <p>The <code>/user</code> route handles endpoints related to user management, such as user registration and
+            authentication.</p>
+        <h3>/tasks</h3>
+        <p>The <code>/tasks</code> route handles endpoints related to task management, such as creating, updating,
+            and deleting tasks.</p>
+    </section>
+
+    <h1 style="font-size: 40px; color: gray;">API Endpoints :-</h1>
+
+    <section>
+
+        <h2>Sign Up Endpoint :- /user (POST)</h2>
+        <p>
+            This endpoint allows users to sign up and create a new account.
+        </p>
+        <h3>Requirements</h3>
+        <ul>
+            <li>
+                Method: POST
+            </li>
+            <li>
+                Endpoint: <code>/user</code>
+            </li>
+            <li>
+                Request Body: The request body must contain the following fields:
+                <ul>
+                    <li><code>name</code>: User's name (minimum 3 characters)</li>
+                    <li><code>email</code>: User's email address (in a valid email format)</li>
+                    <li><code>password</code>: User's password (minimum 1 character)</li>
+                </ul>
+                The request body is validated against the SignUpBody schema using Zod.
+            </li>
+            <li>
+                JWT Token: Upon successful registration, a JWT token containing the user ID is generated and returned in
+                the response. This token should be included in the Authorization header of each subsequent request for
+                authentication.
+            </li>
+        </ul>
+        <h3>JWT Token</h3>
+        <p>
+            After successful registration, a JWT token is generated containing the user's unique identifier (ID). This
+            token should be included in the Authorization header of each subsequent request for authentication. The
+            format of the Authorization header is as follows:
+        </p>
+        <code>
+            Authorization: &lt;JWT_TOKEN&gt;
+        </code>
+        <p>
+            Replace <code>&lt;JWT_TOKEN&gt;</code> with the actual JWT token generated during sign up.
+        </p>
+        <h3>Response</h3>
+        <p>
+            Upon successful sign up, the API returns a JSON response containing the generated JWT token:
+        </p>
+        <pre><code>"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjQzMDc4MGVmZjBlNzA2NjQzYmRkMTEiLCJpYXQiOjE3MTU2Njg4NjR9.i2NhluyGyZaT7D0x8cic7sx6hOHE5AceR9OFnv7DQ7k"</code></pre>
+
+    </section>
+
+    <section>
+        <h2>Sign In Endpoint :- /user(GET)</h2>
+        <p>
+            This endpoint allows users to sign in and authenticate with their credentials.
+        </p>
+        <h3>Requirements</h3>
+        <ul>
+            <li>
+                Method: POST
+            </li>
+            <li>
+                Endpoint: <code>/user</code>
+            </li>
+            <li>
+                Request Body: The request body must contain the following fields:
+                <ul>
+                    <li><code>email</code>: User's email address (in a valid email format)</li>
+                    <li><code>password</code>: User's password (minimum 1 character)</li>
+                </ul>
+                The request body is validated against the SignInBody schema using Zod.
+            </li>
+            <li>
+                JWT Token: Upon successful authentication, a JWT token containing the user ID is generated and returned
+                in the response. This token should be included in the Authorization header of each subsequent request
+                for authentication.
+            </li>
+        </ul>
+        <h3>Response</h3>
+        <p>
+            Upon successful sign in, the API returns a JSON response containing the generated JWT token:
+        </p>
+        <pre><code>"token": "&lt;JWT_TOKEN&gt;"</code></pre>
+        <p>
+            Include this JWT token in the Authorization header of each subsequent request for authentication.
+        </p>
+    </section>
+
+
+
+    <section>
+        <h2>Get all task :- /tasks (GET)</h2>
+        <p>
+            This endpoint retrieves all tasks along with their associated subtasks for a user.
+        </p>
+        <h3>Requirements</h3>
+        <ul>
+            <li>
+                Authentication: Token-based authentication is required. After signing up, include the JWT token in the
+                Authorization header of each request.
+            </li>
+            <li>
+                Endpoint: <code>/tasks</code>
+            </li>
+            <li>
+                Method: GET
+            </li>
+        </ul>
+        <h3>Request</h3>
+        <p>
+            No request body is required for this endpoint.
+        </p>
+        <h3>Response</h3>
+        <p>
+            The response contains a list of tasks along with their associated subtasks. Each task object includes
+            details such as subject, deadline, status, and a list of subtasks.
+        </p>
+        <pre>
+            <code>
+{
+    "tasks": [
+        {
+            "id": "task_id",
+            "subject": "Task subject",
+            "deadline": "Deadline date",
+            "status": "Task status",
+            "subtasks": [
+                {
+                    "id": "subtask_id",
+                    "subject": "Subtask subject",
+                    "deadline": "Deadline date",
+                    "status": "Subtask status"
+                },
+                ...
+            ]
+        },
+        ...
+    ]
+}
+            </code>
+        </pre>
+    </section>
+
+    <section>
+        <h2>Create New Task Endpoint -: /tasks (POST)</h2>
+        <p>
+            This endpoint allows users to create a new task by providing details such as subject, deadline, and status
+            in the request body.
+        </p>
+        <h3>Requirements</h3>
+        <ul>
+            <li>
+                Authentication: Token-based authentication is required. After signing up, include the JWT token in the
+                Authorization header of each request.
+            </li>
+            <li>
+                Endpoint: <code>/tasks</code>
+            </li>
+            <li>
+                Method: POST
+            </li>
+            <li>
+                Request Body: The request body must contain details of the new task including subject, deadline, and
+                status. The request body should be validated against the TaskSchema schema using Zod.
+            </li>
+        </ul>
+        <h3>Response</h3>
+        <p>
+            Upon successful creation of the new task, the API returns the details of the newly created task in the
+            response. The response format is JSON.
+        </p>
+        <pre><code>{
+        "id": "task_id",
+        "subject": "Task subject",
+        "deadline": "Deadline date",
+        "status": "Task status",
+        "subtasks": [
+            {
+                "id": "subtask_id",
+                "subject": "Subtask subject",
+                "deadline": "Deadline date",
+                "status": "Subtask status"
+            },
+            ...
+        ]
+    }
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Update Task Endpoint :- /tasks/:taskId (PUT)</h2>
+        <p>
+            This endpoint allows users to update an existing task by providing new details such as subject, deadline,
+            and status in the request body.
+        </p>
+        <h3>Requirements</h3>
+        <ul>
+            <li>
+                Authentication: Token-based authentication is required. After signing up, include the JWT token in the
+                Authorization header of each request.
+            </li>
+            <li>
+                Endpoint: <code>/tasks/:taskId</code>
+            </li>
+            <li>
+                Method: PUT
+            </li>
+            <li>
+                Request Body: The request body must contain the new details of the task to be updated including subject,
+                deadline, and status. The request body should be validated against the TaskUpdateSchema schema using
+                Zod.
+            </li>
+            <li>
+                URL Parameters: The task ID to be updated should be provided as a URL parameter.
+            </li>
+        </ul>
+        <h3>Response</h3>
+        <p>
+            Upon successful update of the task, the API returns the details of the updated task in the response. The
+            response format is JSON.
+        </p>
+    </section>
+
+    <section>
+        <h2>Delete Task Endpoint :- /tasks/:taskId (DELETE)</h2>
+        <p>
+            This endpoint allows users to mark an existing task as deleted without physically removing it from the
+            database.
+        </p>
+        <h3>Requirements</h3>
+        <ul>
+            <li>
+                Authentication: Token-based authentication is required. After signing up, include the JWT token in the
+                Authorization header of each request.
+            </li>
+            <li>
+                Endpoint: <code>/tasks/:taskId</code>
+            </li>
+            <li>
+                Method: DELETE
+            </li>
+            <li>
+                URL Parameters: The task ID to be marked as deleted should be provided as a URL parameter.
+            </li>
+        </ul>
+        <h3>Response</h3>
+        <p>
+            Upon successful marking of the task as deleted, the API returns a success message in the response. The
+            response format is JSON.
+        </p>
+    </section>
+
+
+    <section>
+        <h2>Get Subtasks for Task Endpoint :- /tasks/:taskId/subtasks (GET)</h2>
+        <p>
+            This endpoint allows users to retrieve all non-deleted subtasks associated with a specific task.
+        </p>
+        <h3>Requirements</h3>
+        <ul>
+            <li>
+                Authentication: Token-based authentication is required. After signing up, include the JWT token in the
+                Authorization header of each request.
+            </li>
+            <li>
+                Endpoint: <code>/tasks/:taskId/subtasks</code>
+            </li>
+            <li>
+                Method: GET
+            </li>
+            <li>
+                URL Parameters: The task ID for which subtasks are to be retrieved should be provided as a URL
+                parameter.
+            </li>
+        </ul>
+        <h3>Response</h3>
+        <p>
+            Upon successful retrieval of non-deleted subtasks associated with the specified task, the API returns an
+            array of subtasks in the response. The response format is JSON.
+        </p>
+    </section>
+
+    <section>
+        <h2>Update Subtasks for Task Endpoint :- /tasks/:taskId/subtasks (PUT)</h2>
+        <p>
+            This endpoint allows users to update the list of subtasks for a specific task.
+        </p>
+        <h3>Requirements</h3>
+        <ul>
+            <li>
+                Authentication: Token-based authentication is required. After signing up, include the JWT token in the
+                Authorization header of each request.
+            </li>
+            <li>
+                Endpoint: <code>/tasks/:taskId/subtasks</code>
+            </li>
+            <li>
+                Method: PUT
+            </li>
+            <li>
+                URL Parameters: The task ID for which subtasks are to be updated should be provided as a URL parameter.
+            </li>
+            <li>
+                Request Body: The request body must contain the complete list of updated subtasks for the task. Each
+                subtask should include details such as subject, deadline, and status. The request body should be
+                validated against the SubTaskUpdateSchema schema using Zod.
+            </li>
+        </ul>
+        <h3>Response</h3>
+        <p>
+            Upon successful update of the subtasks for the specified task, the API returns an array of non-deleted
+            subtasks associated with the task in the response. The response format is JSON.
+        </p>
+    </section>
+
+</body>
+
+</html>
