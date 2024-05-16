@@ -25,7 +25,25 @@
         }
 
         section {
-            margin: 40px;
+            margin: 32px;
+            @media (max-width: 768px) {
+                margin: 20px;
+            }
+        }
+        
+        .heading {
+            font-size: 52px;
+            @media (max-width: 768px) {
+                font-size: 36px;
+            }
+        }
+
+        .sectionHeading {
+            font-size: 40px;
+             color: rgb(113, 51, 51);
+             @media (max-width: 768px) {
+                font-size: 28px;
+            }
         }
 
         pre {
@@ -44,7 +62,7 @@
 
 <body style="background-color: rgb(218, 224, 230);">
     <div style="display: flex; justify-content: space-between; ">
-        <div style="font-size: 52px; font-weight: 600;">Task Manager API Documentation</div>
+        <div class="heading" style=" font-weight: 600; ">Task Manager API Documentation</div>
         <div style="display: flex; gap: 16px; align-items: center; font-size: 20px;">
             <div><a style="color: blueviolet; " href="https://tasks-api-d76g.onrender.com/" target="_blank">Live</a></div>
             <div><a style="color: blueviolet;" href="https://github.com/omjeem/tasks-api" target="_blank">Github</a></div>
@@ -53,7 +71,7 @@
 
 
     </div>
-    <h1 style="font-size: 40px; color: gray;">Technologies Used :-</h1>
+    <h1 class="sectionHeading">Technologies Used :-</h1>
     <section>
 
 
@@ -97,7 +115,7 @@
 
     </section>
 
-    <h1 style="font-size: 40px; color: gray;">Schema Details :-</h1>
+    <h1 class="sectionHeading">Schema Details :-</h1>
 
     <section>
 
@@ -219,7 +237,7 @@
 
     </section>
 
-    <h1 style="font-size: 40px; color: gray;">Routes Types :-</h1>
+    <h1 class="sectionHeading">Routes Types :-</h1>
 
     <section>
         <h3>/user</h3>
@@ -230,7 +248,7 @@
             and deleting tasks.</p>
     </section>
 
-    <h1 style="font-size: 40px; color: gray;">API Endpoints :-</h1>
+    <h1 class="sectionHeading">API Endpoints :-</h1>
 
     <section>
 
