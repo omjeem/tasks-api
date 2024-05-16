@@ -563,6 +563,53 @@
         </p>
     </section>
 
+    <section>
+        <h2>Delete Subtasks for Task Endpoint :- /tasks/:taskId/subtasks/:subtaskId (DELETE)</h2>
+        <p>
+            This endpoint allows users to delete the subtasks for a specific task.
+        </p>
+        <h3>Requirements</h3>
+        <ul>
+            <li>
+                Authentication: Token-based authentication is required. After signing up, include the JWT token in the
+                Authorization header of each request.
+            </li>
+            <li>
+                Endpoint: <code>/tasks/:taskId/subtasks/:subTaskId</code>
+            </li>
+            <li>
+                Method: DELETE
+            </li>
+            <li>
+                URL Parameters: The task ID for which subtasks are to be deletd should be provided as a URL parameter.
+            </li>
+        </ul>
+        <h3>Behavior</h3>
+        <p>
+            When a subtask is marked as deleted, its <code>isDeleted</code> field will be set to 
+            <code>false</code>, indicating that it is still present in the database but considered deleted.
+        </p>
+        <h3>Response</h3>
+        <p>
+            Upon successful deletion, the endpoint will return a JSON response with a success message.
+            If an error occurs, an error response with an appropriate message and status code will be returned.
+        </p>
+        <p>Example success response:</p>
+        
+        <code>
+            {
+                "message": "Task Deleted Successfully"
+            }
+        </code>
+        <p>Example error response:</p>
+        <code>
+            {
+                "message": "Internal Server Error",
+                "error": { ... }
+            }
+        </code>
+    </section>
+
 </body>
 
 </html>

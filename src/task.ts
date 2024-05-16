@@ -282,4 +282,36 @@ taskRouter.put("/:taskId/subtasks", async (req: CustomRequest, res: Response) =>
 });
 
 
+taskRouter.delete("/:taskId/subtasks/:subTaskId", async (req: CustomRequest, res: Response) => {
+    const userId = new ObjectId(req.userId); // Extract the user ID from the request
+    const taskId = new ObjectId(req.params.taskId); // Extract the task ID from the URL parameters
+    const subTaskId = new ObjectId(req.params.subTaskId); // Extract the sub task ID from the URL parameters
+    try {
+        const updateSubTask = await User.findOneAndUpdate(
+            {
+                _id: userId,
+                "task._id": taskId,
+                "task.subTask._id": subTaskId,
+            },
+            {
+                $set: {
+                    "task.$.subTask.$[subTask].isDeleted": true,
+                },
+            },
+            {
+                arrayFilters: [{ "subTask._id": subTaskId }],
+            }
+        ); // Send a success message in the response upon successful deletion
+        return res.status(200).json({
+            message: "Task Deleted Successfully"
+        });
+    } catch (err) {
+        return res.status(500).json({
+            message: "Internal Server Error", // Send an error response for any internal server error
+            error: err // Include the error details in the response for debugging
+        });
+    }
+});
+
+
 export default taskRouter;
