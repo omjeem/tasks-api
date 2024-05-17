@@ -259,7 +259,7 @@
         <h3>Requirements</h3>
         <ul>
             <li>
-                Method: POST
+                Method: <b>POST</b>
             </li>
             <li>
                 Endpoint: <code>/user</code>
@@ -307,7 +307,7 @@
         <h3>Requirements</h3>
         <ul>
             <li>
-                Method: POST
+                Method: <b>POST</b>
             </li>
             <li>
                 Endpoint: <code>/user</code>
@@ -353,7 +353,7 @@
                 Endpoint: <code>/tasks</code>
             </li>
             <li>
-                Method: GET
+                Method: <b>GET</b>
             </li>
         </ul>
         <h3>Request</h3>
@@ -407,7 +407,7 @@
                 Endpoint: <code>/tasks</code>
             </li>
             <li>
-                Method: POST
+                Method: <b>POST</b>
             </li>
             <li>
                 Request Body: The request body must contain details of the new task including subject, deadline, and
@@ -453,11 +453,11 @@
                 Endpoint: <code>/tasks/:taskId</code>
             </li>
             <li>
-                Method: PUT
+                Method: <b>PUT</b>
             </li>
             <li>
-                Request Body: The request body must contain the new details of the task to be updated including subject,
-                deadline, and status. The request body should be validated against the TaskUpdateSchema schema using
+                Request Body: The request body must contain the new details of the task to be updated including <b>subject</b>,
+                <b>deadline</b>, and <b>status</b>. The request body should be validated against the TaskUpdateSchema schema using
                 Zod.
             </li>
             <li>
@@ -487,7 +487,7 @@
                 Endpoint: <code>/tasks/:taskId</code>
             </li>
             <li>
-                Method: DELETE
+                Method: <b>DELETE</b>
             </li>
             <li>
                 URL Parameters: The task ID to be marked as deleted should be provided as a URL parameter.
@@ -516,7 +516,7 @@
                 Endpoint: <code>/tasks/:taskId/subtasks</code>
             </li>
             <li>
-                Method: GET
+                Method: <b>GET</b>
             </li>
             <li>
                 URL Parameters: The task ID for which subtasks are to be retrieved should be provided as a URL
@@ -531,9 +531,11 @@
     </section>
 
     <section>
-        <h2>Update Subtasks for Task Endpoint :- /tasks/:taskId/subtasks (PUT)</h2>
+        <h2>Add new Subtasks for Task Endpoint :- /tasks/:taskId/subtasks (PUT)</h2>
         <p>
-            This endpoint allows users to update the list of subtasks for a specific task.
+            <p>
+                This endpoint allows users to add a list of new subtasks for a specific task.
+            </p>
         </p>
         <h3>Requirements</h3>
         <ul>
@@ -545,15 +547,15 @@
                 Endpoint: <code>/tasks/:taskId/subtasks</code>
             </li>
             <li>
-                Method: PUT
+                Method: <b>PUT</b> 
             </li>
             <li>
                 URL Parameters: The task ID for which subtasks are to be updated should be provided as a URL parameter.
             </li>
             <li>
-                Request Body: The request body must contain the complete list of updated subtasks for the task. Each
-                subtask should include details such as subject, deadline, and status. The request body should be
-                validated against the SubTaskUpdateSchema schema using Zod.
+                Request Body: The request body must contain the complete <b>list</b> of new subtasks to be added to the task. Each
+                subtask should include details such as <b>subject</b>, <b>deadline</b>, and <b>status</b>. The request body should be
+                validated against the SubTaskCreateSchema schema using Zod.
             </li>
         </ul>
         <h3>Response</h3>
@@ -578,7 +580,7 @@
                 Endpoint: <code>/tasks/:taskId/subtasks/:subTaskId</code>
             </li>
             <li>
-                Method: DELETE
+                Method: <b>DELETE</b>
             </li>
             <li>
                 URL Parameters: The task ID for which subtasks are to be deletd should be provided as a URL parameter.
@@ -599,6 +601,54 @@
         <code>
             {
                 "message": "Task Deleted Successfully"
+            }
+        </code>
+        <p>Example error response:</p>
+        <code>
+            {
+                "message": "Internal Server Error",
+                "error": { ... }
+            }
+        </code>
+    </section>
+
+    <section>
+        <h2>Update Subtasks for Task Endpoint :- /tasks/:taskId/subtasks/:subtaskId (PUT)</h2>
+        <p>
+            This endpoint allows users to update the subtasks for a specific task.
+        </p>
+        <h3>Requirements</h3>
+        <ul>
+            <li>
+                Authentication: Token-based authentication is required. After signing up, include the JWT token in the
+                Authorization header of each request.
+            </li>
+            <li>
+                Endpoint: <code>/tasks/:taskId/subtasks/:subTaskId</code>
+            </li>
+            <li>
+                Method: <b>PUT</b>
+            </li>
+            <li>
+                URL Parameters: The task ID for which subtasks are to be updated should be provided as a URL parameter.
+            </li>
+            <li>
+                Request Body: The request body must contain the updated subtasks object for the task. 
+                Each subtask should include details such as <b>subject</b>, <b>deadline</b>, and <b>status</b>. The request body should be
+                validated against the SubTaskUpdateSchemaObject schema using Zod.
+            </li>
+        </ul>
+        
+        <h3>Response</h3>
+        <p>
+            Upon successful updation, the endpoint will return a JSON response with a success message.
+            If an error occurs, an error response with an appropriate message and status code will be returned.
+        </p>
+        <p>Example success response:</p>
+        
+        <code>
+            {
+                "message": "Task Updated Successfully"
             }
         </code>
         <p>Example error response:</p>

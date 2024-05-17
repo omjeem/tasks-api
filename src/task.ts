@@ -1,6 +1,6 @@
 import { Request, Response, response } from "express";
 import { middleware } from "./middleware";
-import { SubTaskUpdateSchema, TaskSchema, TaskUpdateSchema } from "./zod";
+import { SubTaskUpdateSchema, SubTaskUpdateSchemaObject, TaskSchema, TaskUpdateSchema } from "./zod";
 import { User } from "./db";
 const { ObjectId } = require('mongoose').Types;
 
@@ -304,6 +304,46 @@ taskRouter.delete("/:taskId/subtasks/:subTaskId", async (req: CustomRequest, res
         ); // Send a success message in the response upon successful deletion
         return res.status(200).json({
             message: "Task Deleted Successfully"
+        });
+    } catch (err) {
+        return res.status(500).json({
+            message: "Internal Server Error", // Send an error response for any internal server error
+            error: err // Include the error details in the response for debugging
+        });
+    }
+});
+
+taskRouter.put("/:taskId/subtasks/:subTaskId", async (req: CustomRequest, res: Response) => {
+    const body = req.body; // Extract the request body
+    const isValid = SubTaskUpdateSchemaObject.safeParse(body); // Validate the request body against the SubTaskUpdateSchema schema using Zod
+    if (!isValid.success) {
+        return res.status(400).json({
+            message: "Invalid Body" // Send an error response if the request body is invalid
+        });
+    }
+    const userId = new ObjectId(req.userId); // Extract the user ID from the request
+    const taskId = new ObjectId(req.params.taskId); // Extract the task ID from the URL parameters
+    const subTaskId = new ObjectId(req.params.subTaskId); // Extract the sub task ID from the URL parameters
+    try {
+        const updateSubTask = await User.findOneAndUpdate(
+            {
+                _id: userId,
+                "task._id": taskId,
+                "task.subTask._id": subTaskId,
+            },
+            {
+                $set: {
+                    "task.$.subTask.$[subTask].subject": body.subject,
+                    "task.$.subTask.$[subTask].deadline": body.deadline,
+                    "task.$.subTask.$[subTask].status": body.status,
+                },
+            },
+            {
+                arrayFilters: [{ "subTask._id": subTaskId }],
+            }
+        ); // Send a success message in the response upon successful deletion
+        return res.status(200).json({
+            message: "Task Updated Successfully"
         });
     } catch (err) {
         return res.status(500).json({

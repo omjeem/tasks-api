@@ -48,8 +48,15 @@ const SubTaskUpdateSchema = z.array(z.object({
     _id: z.string().optional() // Subtask ID is required
 }));
 
+const SubTaskUpdateSchemaObject = z.object({
+    subject: z.string().min().max().optional(), // Subtask subject update is optional
+    deadline: z.string().optional(), // Subtask deadline update is optional
+    status: z.enum(["Pending", "Completed", "Overdue"]).optional(), // Subtask status update is optional
+});
+
+
 /**
  * Export Validation Schemas
  * Make the defined Zod validation schemas available for use in other parts of the application.
  */
-export { SignUpBody, SignInBody, TaskSchema, TaskUpdateSchema, SubTaskUpdateSchema };
+export { SignUpBody, SignInBody, TaskSchema, TaskUpdateSchema, SubTaskUpdateSchema, SubTaskUpdateSchemaObject };
