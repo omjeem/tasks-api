@@ -39,9 +39,7 @@ taskRouter.post("/", async (req: CustomRequest, res: Response) => {
     try {
         const isValid = TaskSchema.safeParse(body); // Validate the request body against the TaskSchema schema using Zod
         if (!isValid.success) {
-            return res.status(200).json({
-                message: "Invalid Body" // Send an error response if the request body is invalid
-            });
+            return res.status(200).json(isValid.error); // Send an error response if the request body is invalid
         }
         // Add the new task to the user's task list in the database
         const response = await User.findByIdAndUpdate(
@@ -123,9 +121,7 @@ taskRouter.put("/:taskId", async (req: CustomRequest, res: Response) => {
     try {
         const isValid = TaskUpdateSchema.safeParse(body); // Validate the request body against the TaskUpdateSchema schema using Zod
         if (!isValid.success) {
-            return res.status(200).json({
-                message: "Invalid Body" // Send an error response if the request body is invalid
-            });
+            return res.status(200).json(isValid.error); // Send an error response if the request body is invalid
         }
         // Update the specified task with the new details in the database
         const response = await User.findOneAndUpdate(
@@ -238,9 +234,7 @@ taskRouter.put("/:taskId/subtasks", async (req: CustomRequest, res: Response) =>
     try {
         const isValid = SubTaskUpdateSchema.safeParse(body); // Validate the request body against the SubTaskUpdateSchema schema using Zod
         if (!isValid.success) {
-            return res.status(200).json({
-                message: "Invalid Body" // Send an error response if the request body is invalid
-            });
+            return res.status(200).json(isValid.error); // Send an error response if the request body is invalid
         }
         // Add the updated subtasks to the specified task in the database
         const updateTask = await User.findOneAndUpdate(
@@ -317,9 +311,7 @@ taskRouter.put("/:taskId/subtasks/:subTaskId", async (req: CustomRequest, res: R
     const body = req.body; // Extract the request body
     const isValid = SubTaskUpdateSchemaObject.safeParse(body); // Validate the request body against the SubTaskUpdateSchema schema using Zod
     if (!isValid.success) {
-        return res.status(400).json({
-            message: "Invalid Body" // Send an error response if the request body is invalid
-        });
+        return res.status(400).json(isValid.error);
     }
     const userId = new ObjectId(req.userId); // Extract the user ID from the request
     const taskId = new ObjectId(req.params.taskId); // Extract the task ID from the URL parameters

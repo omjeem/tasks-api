@@ -38,9 +38,7 @@ userRouter.post("/", async (req: Request, res: Response) => {
         const isValid = SignUpBody.safeParse(body); // Validate the request body against the SignUpBody schema using Zod
         
         if (!isValid.success) {
-            return res.status(403).json({
-                message: "Wrong Body" // Send an error response if the request body is invalid
-            });
+            return res.status(403).json(isValid.error); // Send an error response if the request body is invalid
         }
         // Create a new user object with the provided name, email, and password
         const user = new User({ name: body.name, email: body.email, password: body.password });
@@ -74,9 +72,7 @@ userRouter.get("/", async (req: Request, res: Response) => {
         const body = req.body; // Extract the request body
         const isValid = SignInBody.safeParse(body); // Validate the request body against the SignInBody schema using Zod
         if (!isValid.success) {
-            return res.status(403).json({
-                message: "Wrong Body" // Send an error response if the request body is invalid
-            });
+            return res.status(403).json(isValid.error); // Send an error response if the request body is invalid
         }
         // Find a user record in the database with the provided email and password
         const response = await User.findOne({ email: body.email, password: body.password });
